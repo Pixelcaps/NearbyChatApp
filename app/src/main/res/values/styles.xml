@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="LoginActivityTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorPrimary">#000</item>
+        <item name="android:colorAccent">#FFFF0000</item>
+        <item name="android:textColor">@color/ferrariRed</item>
+    </style>
+
 </resources>

@@ -14,6 +14,7 @@
         android:layout_weight="1">
 
         <ImageView
+            android:src="@mipmap/ic_launcher"
             android:layout_width="85dp"
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
@@ -76,6 +77,17 @@
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/switchToNewLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Switch to new login"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorAccent" />
+
 
 
         </LinearLayout>

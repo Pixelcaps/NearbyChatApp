@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         findViewById(R.id.textViewSignup).setOnClickListener(this);
         findViewById(R.id.buttonLogin).setOnClickListener(this);
+        findViewById(R.id.switchToNewLogin).setOnClickListener(this);
 
         editTextEmail = this.<EditText>findViewById(R.id.editTextEmail);
         editTextPassword = this.<EditText>findViewById(R.id.editTextPassword);
@@ -46,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.buttonLogin:
                 userLogin();
+                break;
+            case R.id.switchToNewLogin:
+                startActivity(new Intent(this, LoginActivity.class));
                 break;
         }
     }
