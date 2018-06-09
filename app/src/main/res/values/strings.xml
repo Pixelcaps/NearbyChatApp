@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NearbyChatApp</string>
+    <string name="button_continue">Continue</string>
 </resources>

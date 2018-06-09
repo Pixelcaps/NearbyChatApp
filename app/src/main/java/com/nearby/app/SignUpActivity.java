@@ -27,6 +27,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.LoginActivityTheme);
         setContentView(R.layout.activity_sign_up);
 
         editTextEmail = this.<EditText>findViewById(R.id.editTextEmail);
@@ -35,7 +36,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         mAuth = FirebaseAuth.getInstance();
 
         findViewById(R.id.buttonSignUp).setOnClickListener(this);
-        findViewById(R.id.textViewSignup).setOnClickListener(this);
+        findViewById(R.id.textViewLogin).setOnClickListener(this);
 
         progressBar = this.<ProgressBar>findViewById(R.id.progressbar);
 
