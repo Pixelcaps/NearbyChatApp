@@ -6,9 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,22 +23,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     FirebaseAuth mAuth;
     EditText editTextEmail, editTextPassword;
     ProgressBar progressBar;
+    ViewSwitcher editTextSwitcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.LoginActivityTheme);
         setContentView(R.layout.activity_main);
+        initViews();
 
         mAuth = FirebaseAuth.getInstance();
 
         findViewById(R.id.textViewSignup).setOnClickListener(this);
         findViewById(R.id.buttonLogin).setOnClickListener(this);
-        findViewById(R.id.switchToNewLogin).setOnClickListener(this);
 
         editTextEmail = this.<EditText>findViewById(R.id.editTextEmail);
         editTextPassword = this.<EditText>findViewById(R.id.editTextPassword);
 
         progressBar = this.<ProgressBar>findViewById(R.id.progressbar);
+    }
+
+    private void initViews() {
+        editTextSwitcher = findViewById(R.id.view_switcher);
+        Animation in = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
+        Animation out = AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
+        editTextSwitcher.setInAnimation(in);
+        editTextSwitcher.setOutAnimation(out);
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.editTextPassword);
     }
 
     @Override
@@ -46,10 +61,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, SignUpActivity.class));
                 break;
             case R.id.buttonLogin:
-                userLogin();
-                break;
-            case R.id.switchToNewLogin:
-                startActivity(new Intent(this, LoginActivity.class));
+                if (!editTextEmail.getText().toString().isEmpty()) {
+                    editTextSwitcher.showNext();
+                    if (!editTextPassword.getText().toString().isEmpty()) {
+                        userLogin();
+                    }
+                }
                 break;
         }
     }

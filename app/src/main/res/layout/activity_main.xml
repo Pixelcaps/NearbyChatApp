@@ -7,27 +7,17 @@
     android:orientation="vertical"
     tools:context="com.nearby.app.MainActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"
+        android:padding="20dp"
+        android:layout_marginTop="100dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
-
-        <ImageView
-            android:src="@mipmap/ic_launcher"
-            android:layout_width="85dp"
-            android:layout_height="100dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@color/colorPrimary">
+        android:layout_weight="1" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,57 +28,51 @@
             android:paddingRight="15dp">
 
 
-            <EditText
-                android:id="@+id/editTextEmail"
+            <ViewSwitcher
+                android:id="@+id/view_switcher"
+                android:layout_marginTop="50dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:hint="email"
-                android:inputType="textEmailAddress"
-                android:paddingBottom="15dp"
-                android:textColorHint="@color/colorAccent" />
+                android:padding="20dp">
 
-            <EditText
-                android:id="@+id/editTextPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:hint="password"
-                android:inputType="textPassword"
-                android:paddingBottom="15dp"
-                android:textColorHint="@color/colorAccent" />
+                <EditText
+                    android:id="@+id/editTextEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:paddingBottom="15dp"/>
+
+                <EditText
+                    android:id="@+id/editTextPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:paddingBottom="15dp"/>
+
+            </ViewSwitcher>
 
             <Button
                 android:id="@+id/buttonLogin"
+                android:layout_margin="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="7dp"
-                android:text="Login"
-                android:textAllCaps="false"
-                android:textColor="@color/colorAccent" />
+                android:layout_height="40dp"
+                android:text="@string/button_continue"
+                android:textColor="#FFF"
+                android:background="@color/ferrariRed" />
 
             <TextView
                 android:id="@+id/textViewSignup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="Don't have account? Sign Up"
+                android:text="Don't have account? Sign up"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:textColor="@color/colorAccent" />
-
-            <TextView
-                android:id="@+id/switchToNewLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="Switch to new login"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:textColor="@color/colorAccent" />
-
-
+                android:textColor="@color/ferrariRed" />
 
         </LinearLayout>
 
