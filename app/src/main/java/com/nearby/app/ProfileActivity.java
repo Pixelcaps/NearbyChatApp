@@ -1,12 +1,18 @@
 package com.nearby.app;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.icu.text.UnicodeSetSpanner;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -35,10 +42,19 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    public static final String SHARED_PREFS_FILE = "NearbyChatPreferences";
+    public static final String USERNAME_KEY = "username";
+    public static SharedPreferences sharedPreferences;
+    private Button mEnterCharRoomButton;
+    public static Context mainContext;
     private static final int CHOOSE_IMAGE = 101;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
+    NavigationView navigationView;
     ImageView imageView;
+    ImageView profilePic;
     EditText editText;
     Uri uriProfileImage;
     ProgressBar progressBar;
@@ -46,20 +62,32 @@ public class ProfileActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     TextView textView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-
-        //Toolbar toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_drawer);
 
         editText = this.<EditText>findViewById(R.id.editTextDisplayName);
         imageView = this.<ImageView>findViewById(R.id.imageView);
         progressBar = this.<ProgressBar>findViewById(R.id.progressbar);
         textView = this.<TextView>findViewById(R.id.textViewVerified);
-
+        mDrawerLayout = this.<DrawerLayout>findViewById(R.id.drawer_layout);
+        mToggle = new ActionBarDrawerToggle(this,mDrawerLayout,R.string.open,R.string.close);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        navigationView = this.<NavigationView>findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         mAuth = FirebaseAuth.getInstance();
+
+        View headerView = navigationView.getHeaderView(0);
+        profilePic = headerView.findViewById(R.id.profilePic);
+        profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImageChooser();
+            }
+        });
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +95,8 @@ public class ProfileActivity extends AppCompatActivity {
                 showImageChooser();
             }
         });
+
+
 
         loadUserInformation();
 
@@ -76,6 +106,42 @@ public class ProfileActivity extends AppCompatActivity {
                 saveUserInformation();
             }
         });
+
+        mainContext = getApplicationContext();
+        mEnterCharRoomButton = (Button) findViewById(R.id.buttonChat);
+
+        sharedPreferences = getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE);
+        String display_name = sharedPreferences.getString(USERNAME_KEY,"");
+
+        if (!display_name.isEmpty() && !display_name.equals("")){
+            editText.setText(display_name);
+            editText.setSelection(editText.getText().length());
+        }
+
+        mEnterCharRoomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get the username and sCurrentAvatarColour
+                String username = editText.getText().toString();
+
+                if (username.isEmpty() || username.equals("")){
+                    Snackbar.make(mEnterCharRoomButton,"Empty user", Snackbar.LENGTH_SHORT).show();
+                } else {
+
+                    // Save the username and sCurrentAvatarColour in the shared preferences
+                    saveDisplayName(username);
+
+                    // Enter the chat with the username and avatarColour sent to the ChatActivity
+                    Intent enterChatIntent = new Intent(getApplicationContext(), ChatRoomActivity.class);
+                    enterChatIntent.putExtra(USERNAME_KEY, username);
+                    startActivity(enterChatIntent);
+                }
+            }
+        });
+    }
+
+    private void saveDisplayName(String displayName) {
+        sharedPreferences.edit().putString(USERNAME_KEY, displayName).apply();
     }
 
     @Override
@@ -100,9 +166,9 @@ public class ProfileActivity extends AppCompatActivity {
                 editText.setText(user.getDisplayName());
             }
             if (user.isEmailVerified()) {
-                textView.setText("Email verified");
+                textView.setText("Account verified!");
             } else {
-                textView.setText("Email not verified (Click to verify)");
+                textView.setText("Account not verified (Click to verify)");
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -189,25 +255,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.menuLogout:
-                FirebaseAuth.getInstance().signOut();
-                finish();
-                startActivity(new Intent(this, MainActivity.class));
-                break;
-        }
-        return true;
+        if (mToggle.onOptionsItemSelected(item)) return true;
+        return super.onOptionsItemSelected(item);
     }
 
     private void showImageChooser() {
@@ -215,5 +265,30 @@ public class ProfileActivity extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select profile image"), CHOOSE_IMAGE);
+    }
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+        switch (id){
+            case R.id.saved_messages:
+                break;
+            case R.id.saved_files:
+                break;
+            case R.id.change_name:
+                break;
+            case R.id.change_pic:
+                break;
+            case R.id.verify_account:
+                break;
+            case R.id.logout:
+                FirebaseAuth.getInstance().signOut();
+                finish();
+                startActivity(new Intent(this, MainActivity.class));
+                break;
+        }
+        return false;
     }
 }

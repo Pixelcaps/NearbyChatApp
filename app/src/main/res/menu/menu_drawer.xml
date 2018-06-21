@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/saved_messages"
+            android:icon="@drawable/ic_message_black_24dp"
+            android:title="@string/saved_messages" />
+        <item
+            android:id="@+id/saved_files"
+            android:icon="@drawable/ic_folder_open_black_24dp"
+            android:title="@string/saved_files" />
+    </group>
+    <item android:title="Settings">
+        <menu>
+            <item
+                android:id="@+id/change_name"
+                android:icon="@drawable/ic_title_black_24dp"
+                android:title="@string/change_name" />
+            <item
+                android:id="@+id/change_pic"
+                android:icon="@drawable/ic_person_black_24dp"
+                android:title="@string/change_pic" />
+            <item
+                android:id="@+id/verify_account"
+                android:icon="@drawable/ic_verified_user_black_24dp"
+                android:title="@string/verify_account" />
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_exit_to_app_black_24dp"
+                android:title="@string/logout" />
+        </menu>
+    </item>
+</menu>

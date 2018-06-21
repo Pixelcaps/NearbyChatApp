@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">NearbyChatApp</string>
     <string name="button_continue">Continue</string>
+    <string name="saved_messages">Saved messages</string>
+    <string name="saved_files">Saved files</string>
+    <string name="change_name">Change display name</string>
+    <string name="change_pic">Change profile picture</string>
+    <string name="verify_account">Verify account</string>
+    <string name="logout">Log out</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>
