@@ -15,18 +15,10 @@
         android:orientation="vertical"
         tools:context="com.nearby.app.ProfileActivity">
 
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tap on camera to choose profile picture"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/profile_background">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageView"
@@ -37,7 +29,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_avatar_24dp"
                 app:civ_border_width="2dp"
-                app:civ_border_color="#FF000000"/>
+                app:civ_border_color="@color/PrimaryColorBlue" />
 
             <ProgressBar
                 android:id="@+id/progressbar"

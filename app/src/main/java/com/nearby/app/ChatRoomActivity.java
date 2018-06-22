@@ -77,6 +77,7 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.ChatRoomActivityTheme);
         setContentView(R.layout.activity_chat_room);
 
         Intent intent = getIntent();

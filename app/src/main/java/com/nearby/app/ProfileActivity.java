@@ -81,13 +81,6 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         mAuth = FirebaseAuth.getInstance();
 
         View headerView = navigationView.getHeaderView(0);
-        profilePic = headerView.findViewById(R.id.profilePic);
-        profilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showImageChooser();
-            }
-        });
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,10 +89,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             }
         });
 
-
-
         loadUserInformation();
-
         findViewById(R.id.buttonSave).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

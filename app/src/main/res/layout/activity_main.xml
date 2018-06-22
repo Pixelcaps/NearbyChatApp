@@ -7,19 +7,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.nearby.app.MainActivity">
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/logo"
+        android:tint="@color/SecondaryColorOrange"
         android:padding="20dp"
         android:layout_marginTop="100dp"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" >
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,15 +25,12 @@
             android:orientation="vertical"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
-
-
             <ViewSwitcher
                 android:id="@+id/view_switcher"
                 android:layout_marginTop="50dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp">
-
                 <EditText
                     android:id="@+id/editTextEmail"
                     android:layout_width="match_parent"
@@ -44,7 +39,6 @@
                     android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:paddingBottom="15dp"/>
-
                 <EditText
                     android:id="@+id/editTextPassword"
                     android:layout_width="match_parent"
@@ -53,18 +47,15 @@
                     android:hint="Password"
                     android:inputType="textPassword"
                     android:paddingBottom="15dp"/>
-
             </ViewSwitcher>
-
             <Button
                 android:id="@+id/buttonLogin"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="@string/button_continue"
-                android:textColor="#FFF"
-                android:background="@color/ferrariRed" />
-
+                android:textColor="@color/TextColorDark"
+                android:background="@color/SecondaryColorOrange" />
             <TextView
                 android:id="@+id/textViewSignup"
                 android:layout_width="match_parent"
@@ -73,18 +64,15 @@
                 android:text="Don't have account? Sign up"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:textColor="@color/ferrariRed" />
-
+                android:textColor="@color/SecondaryColorOrange" />
         </LinearLayout>
-
         <ProgressBar
             android:id="@+id/progressbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:progressTint="@color/SecondaryColorOrange"/>
     </RelativeLayout>
-
-
 </LinearLayout>

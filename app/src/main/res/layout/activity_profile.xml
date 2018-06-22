@@ -6,15 +6,6 @@
     android:orientation="vertical"
     tools:context="com.nearby.app.ProfileActivity">
 
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tap on camera to choose profile picture"
-        android:textAlignment="center"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
