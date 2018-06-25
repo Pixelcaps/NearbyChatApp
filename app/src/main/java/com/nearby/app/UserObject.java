@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
 import java.util.Objects;
 
 public class UserObject {
-    public static final String MESSAGE_TYPE = "Hello";
+    public static final String MESSAGE_TYPE = "User";
     private static final Gson sGson = new Gson();
     private String mDisplayName;
 
