@@ -3,20 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.nearby.app.ProfileActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/profile_background">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageView"
             android:layout_width="170dp"
             android:layout_height="170dp"
             android:layout_centerHorizontal="true"
             android:layout_margin="20dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_avatar_24dp"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/PrimaryColorBlue" />
 
         <ProgressBar
             android:id="@+id/progressbar"
@@ -32,24 +37,33 @@
         android:id="@+id/editTextDisplayName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Display Name" />
-
-    <TextView
-        android:id="@+id/textViewVerified"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Verified"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+        android:hint="Enter Display Name"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"/>
 
     <Button
         android:id="@+id/buttonSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="195dp"
+        android:layout_height="59dp"
         android:layout_gravity="center"
         android:layout_marginTop="25dp"
         android:paddingLeft="55dp"
         android:paddingRight="55dp"
-        android:text="Save"
+        android:text="Save changes"
+        android:textAllCaps="false"
+        android:theme="@style/PrimaryFlatButton" />
+
+    <Button
+        android:id="@+id/buttonChat"
+        android:layout_width="195dp"
+        android:layout_height="59dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:background="@color/SecondaryColorOrange"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:text="Enter chat"
         android:textAllCaps="false" />
 
 

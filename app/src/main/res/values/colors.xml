@@ -13,6 +13,6 @@
     <color name="divider">#BDBDBD</color>
     <color name="ferrariRed">#FFFF0000</color>
     <color name="PrimaryColorBlue">#344955</color>
-    <color name="SecondaryColorOrange">#F9AA33</color>
+    <color name="SecondaryColorOrange">#f9aa33</color>
     <color name="TextColorDark">#232F34</color>
 </resources>

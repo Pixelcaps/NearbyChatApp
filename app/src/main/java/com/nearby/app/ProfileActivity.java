@@ -42,7 +42,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 
-public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class ProfileActivity extends AppCompatActivity{
 
     public static final String SHARED_PREFS_FILE = "NearbyChatPreferences";
     public static final String USERNAME_KEY = "username";
@@ -66,21 +66,21 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawer);
+        setContentView(R.layout.activity_profile);
 
         editText = this.<EditText>findViewById(R.id.editTextDisplayName);
         imageView = this.<ImageView>findViewById(R.id.imageView);
         progressBar = this.<ProgressBar>findViewById(R.id.progressbar);
-        textView = this.<TextView>findViewById(R.id.textViewVerified);
-        mDrawerLayout = this.<DrawerLayout>findViewById(R.id.drawer_layout);
-        mToggle = new ActionBarDrawerToggle(this,mDrawerLayout,R.string.open,R.string.close);
-        mToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        navigationView = this.<NavigationView>findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+//        textView = this.<TextView>findViewById(R.id.textViewVerified);
+//        mDrawerLayout = this.<DrawerLayout>findViewById(R.id.drawer_layout);
+//        mToggle = new ActionBarDrawerToggle(this,mDrawerLayout,R.string.open,R.string.close);
+//        mToggle.syncState();
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        navigationView = this.<NavigationView>findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
         mAuth = FirebaseAuth.getInstance();
 
-        View headerView = navigationView.getHeaderView(0);
+        //View headerView = navigationView.getHeaderView(0);
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,22 +154,6 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             }
             if (user.getDisplayName() != null) {
                 editText.setText(user.getDisplayName());
-            }
-            if (user.isEmailVerified()) {
-                textView.setText("Account verified!");
-            } else {
-                textView.setText("Account not verified (Click to verify)");
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(ProfileActivity.this, "Verification email sent", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
             }
         }
 
@@ -245,9 +229,27 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_options, menu);
+        return true;
+    }
+
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mToggle.onOptionsItemSelected(item)) return true;
-        return super.onOptionsItemSelected(item);
+//        if (mToggle.onOptionsItemSelected(item)) return true;
+//        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.logout:
+                FirebaseAuth.getInstance().signOut();
+                finish();
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void showImageChooser() {
@@ -258,27 +260,27 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     }
 
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        int id = item.getItemId();
-        switch (id){
-            case R.id.saved_messages:
-                break;
-            case R.id.saved_files:
-                break;
-            case R.id.change_name:
-                break;
-            case R.id.change_pic:
-                break;
-            case R.id.verify_account:
-                break;
-            case R.id.logout:
-                FirebaseAuth.getInstance().signOut();
-                finish();
-                startActivity(new Intent(this, MainActivity.class));
-                break;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//
+//        int id = item.getItemId();
+//        switch (id){
+//            case R.id.saved_messages:
+//                break;
+//            case R.id.saved_files:
+//                break;
+//            case R.id.change_name:
+//                break;
+//            case R.id.change_pic:
+//                break;
+//            case R.id.verify_account:
+//                break;
+//            case R.id.logout:
+//                FirebaseAuth.getInstance().signOut();
+//                finish();
+//                startActivity(new Intent(this, MainActivity.class));
+//                break;
+//        }
+//        return false;
+//    }
 }

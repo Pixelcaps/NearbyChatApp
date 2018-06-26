@@ -47,13 +47,6 @@
             android:layout_height="wrap_content"
             android:hint="Enter Display Name" />
 
-        <TextView
-            android:id="@+id/textViewVerified"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Verified"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
         <Button
             android:id="@+id/buttonSave"
             android:layout_width="wrap_content"
@@ -73,7 +66,7 @@
             android:layout_marginTop="25dp"
             android:paddingLeft="55dp"
             android:paddingRight="55dp"
-            android:text="Enter ChatRoom"
+            android:text="Enter Chat"
             android:textAllCaps="false" />
 
 

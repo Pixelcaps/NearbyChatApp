@@ -218,8 +218,8 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
     }
 
     private void setUpMessageSendViews() {
-        ImageView mImagePickerButton = (ImageView) findViewById(R.id.add_image_button);
-        mSubmitButton = (ImageButton) findViewById(R.id.send_message_button);
+        ImageView mImagePickerButton = findViewById(R.id.add_image_button);
+        mSubmitButton = findViewById(R.id.send_message_button);
 
         mRotateAnimation.setInterpolator(new LinearInterpolator());
         mRotateAnimation.setDuration(500);
@@ -376,7 +376,7 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
         mUserObjects.add(userObject);
         mUserRecyclerAdapter.notifyItemInserted(mUserObjects.size() - 1);
 
-        RecyclerView usersList = (RecyclerView) mRootContainer.findViewById(R.id.user_view);
+        RecyclerView usersList = mRootContainer.findViewById(R.id.user_view);
         usersList.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
     }
 
