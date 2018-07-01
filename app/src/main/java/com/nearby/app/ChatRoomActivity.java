@@ -2,12 +2,11 @@ package com.nearby.app;
 
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,49 +20,57 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
+import com.google.android.gms.nearby.messages.PublishOptions;
 import com.nearby.app.Utils.ImageCompressAsyncTask;
+import com.nearby.app.Utils.ImageCompressCallback;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
 import com.nguyenhoanglam.imagepicker.model.Image;
 import com.tomergoldst.tooltips.ToolTipsManager;
+import com.tuyenmonkey.mkloader.MKLoader;
 
 import java.util.ArrayList;
 
 import static com.nearby.app.Utils.KeyboardUtils.hideKeyboard;
 import static com.nearby.app.Utils.KeyboardUtils.showSnackbar;
 
-public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
+public class ChatRoomActivity extends AppCompatActivity
+        implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, ImageCompressCallback {
 
     private static final int REQUEST_RESOLVE_ERROR = 1002;
     private static final int REQUEST_IMAGE_PICKER = 1003;
+
     private static final String TAG = ChatRoomActivity.class.getSimpleName();
 
-    private static GoogleApiClient mGoogleApiClient;
-    private static Message mPubMessage;
-    private static MessageListener mMessageListener;
+    private GoogleApiClient mGoogleApiClient;
+
+    private Message mPubMessage;
+    private MessageListener mMessageListener;
 
     private String mUsername;
-    private static UserObject sCurrentUser;
+    private UserObject sCurrentUser;
 
-    private static ArrayList<MessageObject> mMessageObjects;
-    private static ArrayList<UserObject> mUserObjects;
-    private static ArrayList<Image> mSelectedImages;
-    private static boolean mImagesBeingSent;
-    private static ImageButton mSubmitButton;
-    private static RecyclerView.Adapter mMessageRecyclerAdapter;
-    private static RecyclerView.Adapter mUserRecyclerAdapter;
-    private static EditText mTextField;
+    private ArrayList<MessageObject> mMessageObjects;
+    private ArrayList<UserObject> mUserObjects;
+    private ArrayList<Image> mSelectedImages;
+    private boolean mImagesBeingSent;
+    private ImageButton mSubmitButton;
+    private RecyclerView.Adapter mMessageRecyclerAdapter;
+    private RecyclerView.Adapter mUserRecyclerAdapter;
+    private RecyclerView mUsersRecyclerView;
+    private EditText mTextField;
+    private MKLoader mkLoader;
 
-    public static RelativeLayout mRootContainer;
+    private RelativeLayout mRootContainer;
 
-    public static ToolTipsManager toolTipsManager;
+    private ToolTipsManager toolTipsManager;
 
     private static Animation mRotateAnimation = new RotateAnimation(0.0f, 360.0f,
             Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
@@ -86,7 +93,7 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
         mUserObjects = new ArrayList<>();
         mSelectedImages = new ArrayList<>();
 
-        mRootContainer = (RelativeLayout) findViewById(R.id.chatroom_layout);
+        mRootContainer = findViewById(R.id.chatroom_layout);
 
         toolTipsManager = new ToolTipsManager();
 
@@ -126,7 +133,7 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_RESOLVE_ERROR:
                 if (resultCode == RESULT_OK) {
                     mGoogleApiClient.connect();
@@ -135,7 +142,7 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
                 }
                 break;
             case REQUEST_IMAGE_PICKER:
-                if (resultCode == RESULT_OK && data !=null){
+                if (resultCode == RESULT_OK && data != null) {
                     ArrayList<Image> selectedImages = data.getParcelableArrayListExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES);
                     mSelectedImages.addAll(selectedImages);
                     toggleTextEntryField(false);
@@ -147,11 +154,6 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
                 super.onActivityResult(requestCode, resultCode, data);
                 break;
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -169,34 +171,33 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        /*do nothing*/
+        throw new UnsupportedOperationException("Connection has been suspended");
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         subscribe();
-        if (!sCurrentUser.getmDisplayName().isEmpty() && !sCurrentUser.getmDisplayName().isEmpty()){
+        if (!sCurrentUser.getmDisplayName().isEmpty()) {
             publishHelloMessage(sCurrentUser);
         }
-        if (mSelectedImages != null) {
-            if (!mSelectedImages.isEmpty()) {
-                for (Image image : mSelectedImages) {
-                    mImagesBeingSent = true;
-                    mSubmitButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_loop_black_24dp));
-                    mSubmitButton.startAnimation(mRotateAnimation);
+        if (mSelectedImages != null && !mSelectedImages.isEmpty()) {
+            for (Image image : mSelectedImages) {
+                mImagesBeingSent = true;
+                mSubmitButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_loop_black_24dp));
+                mSubmitButton.startAnimation(mRotateAnimation);
 
-                    ImageCompressAsyncTask imageCompressAsyncTask = new ImageCompressAsyncTask();
-                    String[] params = { image.getPath(), mUsername, ImageCompressAsyncTask.TRUE };
-                    imageCompressAsyncTask.execute(params);
-                }
+                ImageCompressAsyncTask imageCompressAsyncTask = new ImageCompressAsyncTask(this);
+                String[] params = {image.getPath(), mUsername, ImageCompressAsyncTask.TRUE};
+                imageCompressAsyncTask.execute(params);
                 mSelectedImages.clear();
             }
         }
     }
 
 
-    private void setUpUsersViews(){
-        RecyclerView mUsersRecyclerView = (RecyclerView) findViewById(R.id.user_view);
+    private void setUpUsersViews() {
+        mUsersRecyclerView = findViewById(R.id.user_view);
 
         RecyclerView.LayoutManager mUsersLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mUsersRecyclerView.setLayoutManager(mUsersLayoutManager);
@@ -205,8 +206,8 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
         mUsersRecyclerView.setAdapter(mUserRecyclerAdapter);
     }
 
-    private void setUpMessagesViews(){
-        RecyclerView mMessagesRecyclerView = (RecyclerView) findViewById(R.id.message_view);
+    private void setUpMessagesViews() {
+        RecyclerView mMessagesRecyclerView = findViewById(R.id.message_view);
         mMessagesRecyclerView.setHasFixedSize(true);
         mTextField = findViewById(R.id.message_entry_field);
 
@@ -215,6 +216,9 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
 
         mMessageRecyclerAdapter = new MessageAdapter(mMessageObjects);
         mMessagesRecyclerView.setAdapter(mMessageRecyclerAdapter);
+
+        mkLoader = findViewById(R.id.connection_loader);
+        mkLoader.setVisibility(View.VISIBLE);
     }
 
     private void setUpMessageSendViews() {
@@ -241,7 +245,7 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
             public void onClick(View view) {
                 String messageBody = mTextField.getText().toString();
 
-                if (!messageBody.isEmpty() && !messageBody.matches("^(\\s+)$")){
+                if (!messageBody.isEmpty() && !messageBody.matches("^(\\s+)$")) {
                     mSubmitButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_loop_black_24dp));
                     mSubmitButton.startAnimation(mRotateAnimation);
 
@@ -251,7 +255,7 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
                     mTextField.setText("");
                     mTextField.clearFocus();
                 } else {
-                    showSnackbar("message is empty");
+                    showSnackbar("message is empty", mRootContainer);
                 }
             }
         });
@@ -261,6 +265,7 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
         if (mGoogleApiClient != null) {
             return;
         }
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Nearby.MESSAGES_API)
                 .addConnectionCallbacks(this)
@@ -269,75 +274,78 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
     }
 
 
-    private void buildMessageListener(){
+    private void buildMessageListener() {
         mMessageListener = new MessageListener() {
             @Override
             public void onFound(Message message) {
                 if (message.getType().equals(MessageObject.MESSAGE_TYPE)) {
                     displayMessageInChat(message, false);
-                } else if(message.getType().equals(UserObject.MESSAGE_TYPE)){
+                } else if (message.getType().equals(UserObject.MESSAGE_TYPE)) {
                     addUserToUsersContainer(UserObject.fromNearbyMessage(message));
                 }
             }
+
             @Override
             public void onLost(Message message) {
                 if (message.getType().equals(MessageObject.MESSAGE_TYPE)) {
                     removeMessageOnLost(message);
-                } else if (message.getType().equals(UserObject.MESSAGE_TYPE)){
+                } else if (message.getType().equals(UserObject.MESSAGE_TYPE)) {
                     removeUserFromUsersContainer(UserObject.fromNearbyMessage(message));
                 }
             }
         };
     }
 
-    private void subscribe(){
+    private void subscribe() {
         Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener)
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
                         if (status.isSuccess()) {
-                            if (mImagesBeingSent){
-                                showSnackbar("fdfdsafsa");
+                            if (mImagesBeingSent) {
+                                showSnackbar("fdfdsafsa", mRootContainer);
                                 mImagesBeingSent = false;
                             } else {
-                                showSnackbar("Connected successfully");
+                                showSnackbar("Connected successfully", mRootContainer);
                             }
                         } else {
-                            showSnackbar("Connection failed");
+                            showSnackbar("Connection failed", mRootContainer);
                         }
                     }
                 });
     }
 
-    public static void publishMessage(final MessageObject messageObject) {
+    public void publishMessage(final MessageObject messageObject) {
         mPubMessage = MessageObject.newNearbyMessage(messageObject);
         toggleTextEntryField(true);
         Nearby.Messages.publish(mGoogleApiClient, mPubMessage)
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
-                        if (status.isSuccess()){
+                        if (status.isSuccess()) {
                             displayMessageInChat(mPubMessage, true);
                         } else {
-                            showSnackbar("publish failed");
+                            showSnackbar("publish failed", mRootContainer);
                         }
                         resetMessageSendAnimation();
                         mSubmitButton.setImageDrawable(ContextCompat
-                                .getDrawable(ProfileActivity.mainContext,R.drawable.ic_send_black_24dp));
+                                .getDrawable(ProfileActivity.mainContext, R.drawable.ic_send_black_24dp));
                     }
                 });
     }
 
-    private void publishHelloMessage(final UserObject userObject){
+    private void publishHelloMessage(final UserObject userObject) {
         mPubMessage = UserObject.newNearbyMessage(userObject);
         Nearby.Messages.publish(mGoogleApiClient, mPubMessage)
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
-                        if (status.isSuccess()){
+                        if (status.isSuccess()) {
                             addUserToUsersContainer(userObject);
+                            mkLoader.setVisibility(View.GONE);
                         } else {
-                            Log.e(TAG, "Could not send user type identifier: " + status);
+                            Log.e(TAG, "Could not send user type identifier: " + status.getStatusMessage());
+                            mkLoader.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -351,7 +359,7 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
         Nearby.Messages.unpublish(mGoogleApiClient, mPubMessage);
     }
 
-    private static void displayMessageInChat(Message message, boolean fromUser){
+    private void displayMessageInChat(Message message, boolean fromUser) {
         MessageObject receivedMessage = MessageObject.fromNearbyMessage(message);
         receivedMessage.setFromUser(fromUser);
         if (!mMessageObjects.contains(receivedMessage)) {
@@ -360,33 +368,44 @@ public class ChatRoomActivity extends AppCompatActivity implements GoogleApiClie
         }
     }
 
-    private void removeMessageOnLost(Message message){
+    private void removeMessageOnLost(Message message) {
         MessageObject lostMessage = MessageObject.fromNearbyMessage(message);
         lostMessage.setFromUser(false);
         mMessageRecyclerAdapter.notifyItemRemoved(mMessageObjects.indexOf(lostMessage));
         mMessageObjects.remove(lostMessage);
     }
 
-    private void removeUserFromUsersContainer(UserObject userObject){
+    private void removeUserFromUsersContainer(UserObject userObject) {
         mUserRecyclerAdapter.notifyItemRemoved(mUserObjects.indexOf(userObject));
         mUserObjects.remove(userObject);
     }
 
-    private void addUserToUsersContainer(UserObject userObject){
+    private void addUserToUsersContainer(UserObject userObject) {
         mUserObjects.add(userObject);
+        mUserRecyclerAdapter.notifyDataSetChanged();
         mUserRecyclerAdapter.notifyItemInserted(mUserObjects.size() - 1);
 
-        RecyclerView usersList = mRootContainer.findViewById(R.id.user_view);
-        usersList.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
+        mUsersRecyclerView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
     }
 
-    private static void toggleTextEntryField(boolean enabled){
+    private void toggleTextEntryField(boolean enabled) {
         mTextField.setFocusable(enabled);
         mTextField.setFocusableInTouchMode(enabled);
     }
 
-    private static void resetMessageSendAnimation(){
+    private void resetMessageSendAnimation() {
         mRotateAnimation.cancel();
         mRotateAnimation.reset();
+    }
+
+
+    @Override
+    public void onCompressSuccess(String displayName, String messageBody, String messageContent, boolean fromUser) {
+        publishMessage(new MessageObject(mUsername, messageBody, MessageObject.MESSAGE_CONTENT_IMAGE, fromUser));
+    }
+
+    @Override
+    public void onCompressError() {
+        showSnackbar("Image too large", mRootContainer);
     }
 }

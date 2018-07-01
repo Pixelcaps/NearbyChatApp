@@ -6,7 +6,6 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import static com.nearby.app.ChatRoomActivity.mRootContainer;
 
 public class KeyboardUtils  {
     public static void hideKeyboard(Activity activity, View view){
@@ -14,9 +13,10 @@ public class KeyboardUtils  {
         mInputMethodManager.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
     }
 
-    public static void showSnackbar(String message){
+    public static void showSnackbar(String message, View mRootContainer){
         if (mRootContainer != null){
-            Snackbar.make(mRootContainer, message, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mRootContainer, message, Snackbar.LENGTH_SHORT)
+                    .show();
         }
     }
 }

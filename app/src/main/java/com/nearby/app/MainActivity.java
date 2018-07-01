@@ -21,7 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     FirebaseAuth mAuth;
-    EditText editTextEmail, editTextPassword;
+    EditText editTextEmail;
+    EditText editTextPassword;
     ProgressBar progressBar;
     ViewSwitcher editTextSwitcher;
 
@@ -37,10 +38,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.textViewSignup).setOnClickListener(this);
         findViewById(R.id.buttonLogin).setOnClickListener(this);
 
-        editTextEmail = this.<EditText>findViewById(R.id.editTextEmail);
-        editTextPassword = this.<EditText>findViewById(R.id.editTextPassword);
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.editTextPassword);
 
-        progressBar = this.<ProgressBar>findViewById(R.id.progressbar);
+        progressBar = findViewById(R.id.progressbar);
     }
 
     private void initViews() {
@@ -54,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.textViewSignup:
                 finish();
                 startActivity(new Intent(this, SignUpActivity.class));

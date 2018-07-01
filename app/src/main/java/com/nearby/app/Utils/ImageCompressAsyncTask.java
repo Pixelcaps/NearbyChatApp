@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 
 import com.nearby.app.ChatRoomActivity;
 import com.nearby.app.MessageObject;
@@ -20,6 +21,11 @@ public class ImageCompressAsyncTask extends AsyncTask<String, Void, String> {
     private static final int MAX_IMAGE_SIZE = 70000;
     private String mUsername;
     private boolean mFromUser;
+    private ImageCompressCallback compressCallback;
+
+    public ImageCompressAsyncTask(ImageCompressCallback compressCallback) {
+        this.compressCallback = compressCallback;
+    }
 
     @Override
     protected String doInBackground(String... strings) {
@@ -65,9 +71,9 @@ public class ImageCompressAsyncTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         if (!s.isEmpty()) {
-            ChatRoomActivity.publishMessage(new MessageObject(mUsername, s, MessageObject.MESSAGE_CONTENT_IMAGE, mFromUser));
+            compressCallback.onCompressSuccess(mUsername, s, MessageObject.MESSAGE_CONTENT_IMAGE, mFromUser);
         } else {
-            KeyboardUtils.showSnackbar("Image too large");
+            compressCallback.onCompressError();
         }
     }
 }
