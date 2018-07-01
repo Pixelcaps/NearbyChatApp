@@ -10,8 +10,10 @@ public class UserObject {
     public static final String MESSAGE_TYPE = "User";
     private static final Gson sGson = new Gson();
     private String mDisplayName;
+    private String userAvatarUrl;
 
-    public UserObject(String displayName) {
+    public UserObject(String displayName, String userAvatarUrl) {
+        this.userAvatarUrl = userAvatarUrl;
         this.mDisplayName = displayName;
     }
 
@@ -37,5 +39,9 @@ public class UserObject {
 
     public String getmDisplayName() {
         return mDisplayName;
+    }
+
+    public String getUserAvatarUrl() {
+        return userAvatarUrl;
     }
 }

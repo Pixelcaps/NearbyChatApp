@@ -46,8 +46,10 @@ public class ProfileActivity extends AppCompatActivity{
 
     public static final String SHARED_PREFS_FILE = "NearbyChatPreferences";
     public static final String USERNAME_KEY = "username";
+    public static final String USER_PHOTO_URL="user_photo_url";
     public static SharedPreferences sharedPreferences;
     private Button mEnterCharRoomButton;
+    private Uri userPhotoUrl;
     public static Context mainContext;
     private static final int CHOOSE_IMAGE = 101;
     private DrawerLayout mDrawerLayout;
@@ -123,6 +125,7 @@ public class ProfileActivity extends AppCompatActivity{
 
                     // Enter the chat with the username and avatarColour sent to the ChatActivity
                     Intent enterChatIntent = new Intent(getApplicationContext(), ChatRoomActivity.class);
+                    enterChatIntent.putExtra(USER_PHOTO_URL, userPhotoUrl.toString());
                     enterChatIntent.putExtra(USERNAME_KEY, username);
                     startActivity(enterChatIntent);
                 }
@@ -148,6 +151,7 @@ public class ProfileActivity extends AppCompatActivity{
 
         if (user != null) {
             if (user.getPhotoUrl() != null) {
+                userPhotoUrl = user.getPhotoUrl();
                 Glide.with(this)
                         .load(user.getPhotoUrl().toString())
                         .into(imageView);

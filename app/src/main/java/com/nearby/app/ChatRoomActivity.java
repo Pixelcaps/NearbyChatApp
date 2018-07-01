@@ -27,7 +27,6 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
-import com.google.android.gms.nearby.messages.PublishOptions;
 import com.nearby.app.Utils.ImageCompressAsyncTask;
 import com.nearby.app.Utils.ImageCompressCallback;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
@@ -55,6 +54,7 @@ public class ChatRoomActivity extends AppCompatActivity
     private MessageListener mMessageListener;
 
     private String mUsername;
+    private String mUserPhotoUrl;
     private UserObject sCurrentUser;
 
     private ArrayList<MessageObject> mMessageObjects;
@@ -86,8 +86,8 @@ public class ChatRoomActivity extends AppCompatActivity
         Intent intent = getIntent();
 
         mUsername = intent.getStringExtra(ProfileActivity.USERNAME_KEY);
-        sCurrentUser = new UserObject(mUsername);
-
+        mUserPhotoUrl = intent.getStringExtra(ProfileActivity.USER_PHOTO_URL);
+        sCurrentUser = new UserObject(mUsername, mUserPhotoUrl);
 
         mMessageObjects = new ArrayList<>();
         mUserObjects = new ArrayList<>();
@@ -382,7 +382,6 @@ public class ChatRoomActivity extends AppCompatActivity
 
     private void addUserToUsersContainer(UserObject userObject) {
         mUserObjects.add(userObject);
-        mUserRecyclerAdapter.notifyDataSetChanged();
         mUserRecyclerAdapter.notifyItemInserted(mUserObjects.size() - 1);
 
         mUsersRecyclerView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
