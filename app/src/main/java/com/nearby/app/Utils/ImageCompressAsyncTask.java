@@ -5,9 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
-import android.view.View;
 
-import com.nearby.app.ChatRoomActivity;
 import com.nearby.app.MessageObject;
 
 import java.io.ByteArrayOutputStream;
@@ -21,6 +19,7 @@ public class ImageCompressAsyncTask extends AsyncTask<String, Void, String> {
     private static final int MAX_IMAGE_SIZE = 70000;
     private String mUsername;
     private boolean mFromUser;
+    private String mUserPhotoUrl;
     private ImageCompressCallback compressCallback;
 
     public ImageCompressAsyncTask(ImageCompressCallback compressCallback) {
@@ -36,7 +35,7 @@ public class ImageCompressAsyncTask extends AsyncTask<String, Void, String> {
             String mFilePath = strings[0];
             mUsername = strings[1];
             mFromUser = !strings[2].equals(FALSE);
-
+            mUserPhotoUrl = strings[3];
             Bitmap bitmap = BitmapFactory.decodeFile(mFilePath);
             String bitmapString = "";
 
@@ -71,7 +70,7 @@ public class ImageCompressAsyncTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         if (!s.isEmpty()) {
-            compressCallback.onCompressSuccess(mUsername, s, MessageObject.MESSAGE_CONTENT_IMAGE, mFromUser);
+            compressCallback.onCompressSuccess(mUsername, s, mUserPhotoUrl, MessageObject.MESSAGE_CONTENT_IMAGE, mFromUser);
         } else {
             compressCallback.onCompressError();
         }

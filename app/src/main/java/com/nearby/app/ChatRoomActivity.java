@@ -188,7 +188,7 @@ public class ChatRoomActivity extends AppCompatActivity
                 mSubmitButton.startAnimation(mRotateAnimation);
 
                 ImageCompressAsyncTask imageCompressAsyncTask = new ImageCompressAsyncTask(this);
-                String[] params = {image.getPath(), mUsername, ImageCompressAsyncTask.TRUE};
+                String[] params = {image.getPath(), mUsername, ImageCompressAsyncTask.TRUE, mUserPhotoUrl};
                 imageCompressAsyncTask.execute(params);
                 mSelectedImages.clear();
             }
