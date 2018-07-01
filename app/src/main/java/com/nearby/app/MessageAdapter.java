@@ -1,5 +1,6 @@
 package com.nearby.app;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -10,12 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     private ArrayList<MessageObject> mMessageArray;
+    private Context context;
 
     public MessageAdapter(ArrayList<MessageObject> messageObjects) {
         this.mMessageArray = messageObjects;
@@ -35,7 +39,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     @Override
     public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-
+        context = parent.getContext();
         if (viewType == 0) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_send, parent, false);
         } else {
@@ -61,6 +65,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
             byte[] imageString = Base64.decode(messageObject.getMessageBody(), Base64.NO_WRAP);
             Bitmap bm = BitmapFactory.decodeByteArray(imageString, 0, imageString.length);
             holder.messageContentIV.setImageBitmap(bm);
+        }
+        if (messageObject.getUserAvatarUrl() != null || !messageObject.getUserAvatarUrl().isEmpty()) {
+            Glide.with(context)
+                    .load(messageObject.getUserAvatarUrl())
+                    .into(holder.avatarIV);
         }
 
         if (position > 0){

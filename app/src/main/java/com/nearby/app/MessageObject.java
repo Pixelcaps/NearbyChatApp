@@ -14,13 +14,15 @@ public class MessageObject {
 
     private static final Gson sGson = new Gson();
     private String mDisplayName;
+    private String mUserAvatar;
     private String mMessageBody;
     private boolean mFromUser;
     private UUID mMessageUUID;
     private String mMessageContent;
 
-    public MessageObject(String displayName, String messageBody, String messageContent, boolean fromUser) {
+    public MessageObject(String displayName, String messageBody, String messageContent, String userAvatar, boolean fromUser) {
         this.mDisplayName = displayName;
+        this.mUserAvatar = userAvatar;
         this.mMessageBody = messageBody;
         this.mMessageContent = messageContent;
         this.mFromUser = fromUser;
@@ -28,10 +30,10 @@ public class MessageObject {
     }
 
     public static Message newNearbyMessage(MessageObject messageObject) {
-        return new Message(sGson.toJson(messageObject).getBytes(Charset.forName("UTF-8")),MESSAGE_TYPE);
+        return new Message(sGson.toJson(messageObject).getBytes(Charset.forName("UTF-8")), MESSAGE_TYPE);
     }
 
-    public static MessageObject fromNearbyMessage(Message message){
+    public static MessageObject fromNearbyMessage(Message message) {
         String nearbyMessageString = new String(message.getContent()).trim();
         return sGson.fromJson(
                 (new String(nearbyMessageString.getBytes(Charset.forName("UTF-8")))),
@@ -41,12 +43,12 @@ public class MessageObject {
     @Override
     public boolean equals(Object obj) {
         boolean match = false;
-        if (obj != null && obj instanceof MessageObject){
+        if (obj != null && obj instanceof MessageObject) {
             if (Objects.equals(((MessageObject) obj).mDisplayName, this.mDisplayName) &&
                     Objects.equals(((MessageObject) obj).mMessageBody, this.mMessageBody) &&
                     Objects.equals(((MessageObject) obj).mMessageContent, this.mMessageContent) &&
                     Objects.equals(((MessageObject) obj).mFromUser, this.mFromUser) &&
-                    Objects.equals(((MessageObject) obj).mMessageUUID, this.mMessageUUID)){
+                    Objects.equals(((MessageObject) obj).mMessageUUID, this.mMessageUUID)) {
                 match = true;
             }
         }
@@ -69,12 +71,16 @@ public class MessageObject {
         return mMessageUUID;
     }
 
-    public String getMessageContent(){
+    public String getMessageContent() {
         return mMessageContent;
     }
 
     public void setFromUser(boolean mFromUser) {
         this.mFromUser = mFromUser;
+    }
+
+    public String getUserAvatarUrl() {
+        return mUserAvatar;
     }
 
 }

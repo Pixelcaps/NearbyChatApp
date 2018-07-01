@@ -249,7 +249,13 @@ public class ChatRoomActivity extends AppCompatActivity
                     mSubmitButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_loop_black_24dp));
                     mSubmitButton.startAnimation(mRotateAnimation);
 
-                    publishMessage(new MessageObject(mUsername, messageBody, MessageObject.MESSAGE_CONTENT_TEXT, true));
+                    publishMessage(
+                            new MessageObject(mUsername,
+                                    messageBody,
+                                    mUserPhotoUrl,
+                                    MessageObject.MESSAGE_CONTENT_TEXT,
+                                    true)
+                    );
 
                     hideKeyboard(ChatRoomActivity.this, view);
                     mTextField.setText("");
@@ -399,8 +405,15 @@ public class ChatRoomActivity extends AppCompatActivity
 
 
     @Override
-    public void onCompressSuccess(String displayName, String messageBody, String messageContent, boolean fromUser) {
-        publishMessage(new MessageObject(mUsername, messageBody, MessageObject.MESSAGE_CONTENT_IMAGE, fromUser));
+    public void onCompressSuccess(String displayName, String messageBody, String userPhotoUrl, String messageContent, boolean fromUser) {
+        publishMessage(
+                new MessageObject(
+                        mUsername,
+                        messageBody,
+                        MessageObject.MESSAGE_CONTENT_IMAGE,
+                        userPhotoUrl,
+                        fromUser)
+        );
     }
 
     @Override

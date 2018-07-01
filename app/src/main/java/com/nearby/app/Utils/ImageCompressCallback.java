@@ -5,7 +5,7 @@ package com.nearby.app.Utils;
  */
 public interface ImageCompressCallback {
 
-    void onCompressSuccess(String displayName, String messageBody, String messageContent, boolean fromUser);
+    void onCompressSuccess(String displayName, String messageBody, String userPhotoUrl, String messageContent, boolean fromUser);
 
     void onCompressError();
 }
