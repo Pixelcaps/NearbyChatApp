@@ -252,8 +252,8 @@ public class ChatRoomActivity extends AppCompatActivity
                     publishMessage(
                             new MessageObject(mUsername,
                                     messageBody,
-                                    mUserPhotoUrl,
                                     MessageObject.MESSAGE_CONTENT_TEXT,
+                                    mUserPhotoUrl,
                                     true)
                     );
 
