@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -29,9 +28,9 @@ import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.nearby.app.Utils.ImageCompressAsyncTask;
 import com.nearby.app.Utils.ImageCompressCallback;
-import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
 import com.nguyenhoanglam.imagepicker.model.Config;
 import com.nguyenhoanglam.imagepicker.model.Image;
+import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker;
 import com.tomergoldst.tooltips.ToolTipsManager;
 import com.tuyenmonkey.mkloader.MKLoader;
 
@@ -68,6 +67,9 @@ public class ChatRoomActivity extends AppCompatActivity
     private RecyclerView mUsersRecyclerView;
     private EditText mTextField;
     private MKLoader mkLoader;
+
+    // for ImagePicker
+    private ArrayList<Image> selectedImages;
 
     private RelativeLayout mRootContainer;
 
@@ -142,9 +144,9 @@ public class ChatRoomActivity extends AppCompatActivity
                     Log.e(TAG, "GoogleApiClient connection failed. Unable to resolve.");
                 }
                 break;
-            case REQUEST_IMAGE_PICKER:
-                if (resultCode == Config.RC_PICK_IMAGES && resultCode == RESULT_OK && data != null) {
-                    ArrayList<Image> selectedImages = data.getParcelableArrayListExtra(Config.EXTRA_IMAGES);
+            case Config.RC_PICK_IMAGES:
+                if (resultCode == RESULT_OK && data != null) {
+                    selectedImages = data.getParcelableArrayListExtra(Config.EXTRA_IMAGES);
                     mSelectedImages.addAll(selectedImages);
                     toggleTextEntryField(false);
                 } else {
@@ -230,7 +232,7 @@ public class ChatRoomActivity extends AppCompatActivity
         mRotateAnimation.setDuration(500);
         mRotateAnimation.setRepeatCount(Animation.INFINITE);
 
-        mImagePickerButton.setOnTouchListener(new View.OnTouchListener() {
+       /* mImagePickerButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 Intent intent = new Intent(ChatRoomActivity.this, ImagePickerActivity.class);
@@ -238,6 +240,23 @@ public class ChatRoomActivity extends AppCompatActivity
                 intent.putExtra(ImagePickerActivity.INTENT_EXTRA_SHOW_CAMERA, false);
                 startActivityForResult(intent, REQUEST_IMAGE_PICKER);
                 return false;
+            }
+        });*/
+
+        mImagePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePicker.with(ChatRoomActivity.this)
+                        .setFolderMode(true)
+                        .setCameraOnly(false)
+                        .setFolderTitle("Album")
+                        .setMultipleMode(false)
+                        .setSelectedImages(selectedImages)
+                        .setMaxSize(10)
+                        .setBackgroundColor("#212121")
+                        .setAlwaysShowDoneButton(true)
+                        .setKeepScreenOn(true)
+                        .start();
             }
         });
 
