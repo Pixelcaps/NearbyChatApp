@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        app:mk_color="@color/black"
+        app:mk_color="#000"
         app:mk_type="Whirlpool" />
 
 </RelativeLayout>

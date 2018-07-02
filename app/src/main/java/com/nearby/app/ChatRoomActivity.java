@@ -30,6 +30,7 @@ import com.google.android.gms.nearby.messages.MessageListener;
 import com.nearby.app.Utils.ImageCompressAsyncTask;
 import com.nearby.app.Utils.ImageCompressCallback;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
+import com.nguyenhoanglam.imagepicker.model.Config;
 import com.nguyenhoanglam.imagepicker.model.Image;
 import com.tomergoldst.tooltips.ToolTipsManager;
 import com.tuyenmonkey.mkloader.MKLoader;
@@ -142,8 +143,8 @@ public class ChatRoomActivity extends AppCompatActivity
                 }
                 break;
             case REQUEST_IMAGE_PICKER:
-                if (resultCode == RESULT_OK && data != null) {
-                    ArrayList<Image> selectedImages = data.getParcelableArrayListExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES);
+                if (resultCode == Config.RC_PICK_IMAGES && resultCode == RESULT_OK && data != null) {
+                    ArrayList<Image> selectedImages = data.getParcelableArrayListExtra(Config.EXTRA_IMAGES);
                     mSelectedImages.addAll(selectedImages);
                     toggleTextEntryField(false);
                 } else {
