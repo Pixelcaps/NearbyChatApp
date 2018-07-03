@@ -232,17 +232,6 @@ public class ChatRoomActivity extends AppCompatActivity
         mRotateAnimation.setDuration(500);
         mRotateAnimation.setRepeatCount(Animation.INFINITE);
 
-       /* mImagePickerButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                Intent intent = new Intent(ChatRoomActivity.this, ImagePickerActivity.class);
-                intent.putExtra(ImagePickerActivity.INTENT_EXTRA_MODE, ImagePickerActivity.MODE_SINGLE);
-                intent.putExtra(ImagePickerActivity.INTENT_EXTRA_SHOW_CAMERA, false);
-                startActivityForResult(intent, REQUEST_IMAGE_PICKER);
-                return false;
-            }
-        });*/
-
         mImagePickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
