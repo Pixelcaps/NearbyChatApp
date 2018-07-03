@@ -329,7 +329,7 @@ public class ChatRoomActivity extends AppCompatActivity
                     public void onResult(@NonNull Status status) {
                         if (status.isSuccess()) {
                             if (mImagesBeingSent) {
-                                showSnackbar("fdfdsafsa", mRootContainer);
+                                showSnackbar("Sending message in the background. Larger images will take longer to be sent", mRootContainer);
                                 mImagesBeingSent = false;
                             } else {
                                 showSnackbar("Connected successfully", mRootContainer);

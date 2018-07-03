@@ -73,16 +73,7 @@ public class ProfileActivity extends AppCompatActivity{
         editText = this.<EditText>findViewById(R.id.editTextDisplayName);
         imageView = this.<ImageView>findViewById(R.id.imageView);
         progressBar = this.<ProgressBar>findViewById(R.id.progressbar);
-//        textView = this.<TextView>findViewById(R.id.textViewVerified);
-//        mDrawerLayout = this.<DrawerLayout>findViewById(R.id.drawer_layout);
-//        mToggle = new ActionBarDrawerToggle(this,mDrawerLayout,R.string.open,R.string.close);
-//        mToggle.syncState();
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        navigationView = this.<NavigationView>findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
         mAuth = FirebaseAuth.getInstance();
-
-        //View headerView = navigationView.getHeaderView(0);
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,8 +234,6 @@ public class ProfileActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        if (mToggle.onOptionsItemSelected(item)) return true;
-//        return super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
@@ -263,28 +252,4 @@ public class ProfileActivity extends AppCompatActivity{
         startActivityForResult(Intent.createChooser(intent, "Select profile image"), CHOOSE_IMAGE);
     }
 
-
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//
-//        int id = item.getItemId();
-//        switch (id){
-//            case R.id.saved_messages:
-//                break;
-//            case R.id.saved_files:
-//                break;
-//            case R.id.change_name:
-//                break;
-//            case R.id.change_pic:
-//                break;
-//            case R.id.verify_account:
-//                break;
-//            case R.id.logout:
-//                FirebaseAuth.getInstance().signOut();
-//                finish();
-//                startActivity(new Intent(this, MainActivity.class));
-//                break;
-//        }
-//        return false;
-//    }
 }

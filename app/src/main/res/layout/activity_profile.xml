@@ -48,9 +48,11 @@
         android:layout_height="59dp"
         android:layout_gravity="center"
         android:layout_marginTop="25dp"
+        android:background="@drawable/button_rounded"
         android:paddingLeft="55dp"
         android:paddingRight="55dp"
         android:text="Save changes"
+        android:textColor="@color/imagepicker_white"
         android:textAllCaps="false"
         android:theme="@style/PrimaryFlatButton" />
 
@@ -60,7 +62,7 @@
         android:layout_height="59dp"
         android:layout_gravity="center"
         android:layout_marginTop="25dp"
-        android:background="@color/SecondaryColorOrange"
+        android:background="@drawable/button_rounded_orange"
         android:paddingLeft="50dp"
         android:paddingRight="50dp"
         android:text="Enter chat"

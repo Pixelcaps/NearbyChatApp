@@ -6,29 +6,40 @@
     android:paddingRight="8dp"
     android:paddingLeft="8dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/avatar"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_avatar_24dp" />
 
-    <TextView
-        android:id="@+id/display_name"
+    <LinearLayout
+        android:id="@+id/user_info_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/avatar"
-        android:layout_alignTop="@+id/avatar"
-        android:layout_alignBottom="@+id/avatar"
-        android:layout_marginLeft="4dp"
-        android:gravity="center_vertical"
-        android:textColor="@android:color/primary_text_light"
-        android:textSize="18sp"/>
+        android:layout_marginBottom="4dp"
+        android:orientation="horizontal">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/avatar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_avatar_24dp" />
+
+        <TextView
+            android:id="@+id/display_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/avatar"
+            android:layout_alignTop="@+id/avatar"
+            android:layout_alignBottom="@+id/avatar"
+            android:layout_marginLeft="4dp"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/primary_text_light"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/message_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/avatar"
+        android:layout_below="@id/user_info_left"
         android:padding="8dp"
         android:layout_marginRight="110dp"
         android:layout_marginBottom="4dp"
